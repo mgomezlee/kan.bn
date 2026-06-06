@@ -57,3 +57,69 @@ html {
   > .tippy-arrow::before {
   @apply border-b-light-600 dark:border-b-dark-600;
 }
+
+/* react-big-calendar theme (scoped to .kan-calendar) */
+.kan-calendar .rbc-toolbar {
+  @apply mb-4 flex-wrap gap-2;
+}
+
+.kan-calendar .rbc-toolbar .rbc-toolbar-label {
+  @apply font-bold text-light-1000 dark:text-dark-1000;
+}
+
+.kan-calendar .rbc-btn-group button {
+  @apply border-light-600 bg-light-50 text-light-1000 dark:border-dark-600 dark:bg-dark-300 dark:text-dark-1000;
+}
+
+.kan-calendar .rbc-btn-group button:hover,
+.kan-calendar .rbc-btn-group button:focus {
+  @apply bg-light-200 dark:bg-dark-200;
+}
+
+.kan-calendar .rbc-btn-group button.rbc-active,
+.kan-calendar .rbc-btn-group button.rbc-active:hover,
+.kan-calendar .rbc-btn-group button.rbc-active:focus {
+  @apply border-light-1000 bg-light-1000 text-light-50 dark:border-dark-1000 dark:bg-dark-1000 dark:text-dark-50;
+}
+
+.kan-calendar .rbc-month-view,
+.kan-calendar .rbc-time-view,
+.kan-calendar .rbc-agenda-view table.rbc-agenda-table {
+  @apply rounded-md border-light-400 dark:border-dark-400;
+}
+
+.kan-calendar .rbc-header,
+.kan-calendar .rbc-month-row + .rbc-month-row,
+.kan-calendar .rbc-day-bg + .rbc-day-bg,
+.kan-calendar .rbc-time-content,
+.kan-calendar .rbc-time-header-content,
+.kan-calendar .rbc-timeslot-group,
+.kan-calendar .rbc-agenda-view table.rbc-agenda-table tbody > tr > td,
+.kan-calendar .rbc-agenda-view table.rbc-agenda-table thead > tr > th {
+  @apply border-light-400 dark:border-dark-400;
+}
+
+.kan-calendar .rbc-header {
+  @apply py-2 font-semibold text-light-950 dark:text-dark-950;
+}
+
+.kan-calendar .rbc-off-range-bg {
+  @apply bg-light-200 dark:bg-dark-100;
+}
+
+.kan-calendar .rbc-today {
+  @apply bg-light-200 dark:bg-dark-200;
+}
+
+.kan-calendar .rbc-event,
+.kan-calendar .rbc-event.rbc-selected {
+  @apply bg-light-1000 text-light-50 dark:bg-dark-1000 dark:text-dark-50;
+}
+
+.kan-calendar .rbc-show-more {
+  @apply text-light-950 dark:text-dark-950;
+}
+
+.kan-calendar .rbc-agenda-view table.rbc-agenda-table tbody > tr > td {
+  @apply text-light-1000 dark:text-dark-1000;
+}

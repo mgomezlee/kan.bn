@@ -9,15 +9,18 @@ import { useEffect, useState } from "react";
 import { DragDropContext, Draggable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
 import {
+  HiOutlineCalendarDays,
   HiOutlinePlusSmall,
   HiOutlineRectangleStack,
   HiOutlineSquare3Stack3D,
+  HiOutlineViewColumns,
 } from "react-icons/hi2";
 
 import type { UpdateBoardInput } from "@kan/api/types";
 
 import type { CardContextMenuAction } from "./components/CardContextMenu";
 import Button from "~/components/Button";
+import CalendarView from "~/components/calendar-view";
 import { DeleteLabelConfirmation } from "~/components/DeleteLabelConfirmation";
 import { LabelForm } from "~/components/LabelForm";
 import Modal from "~/components/modal";
@@ -69,6 +72,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   const [selectedPublicListId, setSelectedPublicListId] =
     useState<PublicListId>("");
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<"board" | "calendar">("board");
 
   const [contextMenu, setContextMenu] = useState<{
     x: number;
@@ -170,6 +174,15 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
   }, [boardId]);
 
   const isLoading = isInitialLoading || isQueryLoading;
+
+  const calendarCards = (boardData?.lists ?? [])
+    .flatMap((list) => list.cards)
+    .filter((card) => card.dueDate != null)
+    .map((card) => ({
+      publicId: card.publicId,
+      title: card.title,
+      dueDate: card.dueDate,
+    }));
 
   useScrollRestore(
     boardId,
@@ -598,6 +611,38 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
                 )}
               </>
             )}
+            <div
+              role="group"
+              aria-label={t`View mode`}
+              className="inline-flex overflow-hidden rounded-md border-[1px] border-light-600 dark:border-dark-600"
+            >
+              <button
+                type="button"
+                aria-pressed={viewMode === "board"}
+                onClick={() => setViewMode("board")}
+                className={`inline-flex items-center gap-1 px-3 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-1000 dark:focus-visible:ring-dark-1000 ${
+                  viewMode === "board"
+                    ? "bg-light-1000 text-light-50 dark:bg-dark-1000 dark:text-dark-50"
+                    : "bg-light-50 text-light-1000 dark:bg-dark-300 dark:text-dark-1000"
+                }`}
+              >
+                <HiOutlineViewColumns className="h-4 w-4" aria-hidden="true" />
+                {t`Board`}
+              </button>
+              <button
+                type="button"
+                aria-pressed={viewMode === "calendar"}
+                onClick={() => setViewMode("calendar")}
+                className={`inline-flex items-center gap-1 px-3 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-light-1000 dark:focus-visible:ring-dark-1000 ${
+                  viewMode === "calendar"
+                    ? "bg-light-1000 text-light-50 dark:bg-dark-1000 dark:text-dark-50"
+                    : "bg-light-50 text-light-1000 dark:bg-dark-300 dark:text-dark-1000"
+                }`}
+              >
+                <HiOutlineCalendarDays className="h-4 w-4" aria-hidden="true" />
+                {t`Calendar`}
+              </button>
+            </div>
             <Tooltip
               content={
                 !canCreateList
@@ -631,6 +676,15 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
           </div>
         </div>
 
+        {viewMode === "calendar" ? (
+          <div className="z-0 flex-1 overflow-y-auto overflow-x-auto">
+            <CalendarView
+              cards={calendarCards}
+              isTemplate={!!isTemplate}
+              boardId={boardId}
+            />
+          </div>
+        ) : (
         <div
           ref={scrollRef}
           onMouseDown={onMouseDown}
@@ -792,6 +846,7 @@ export default function BoardPage({ isTemplate }: { isTemplate?: boolean }) {
             </>
           ) : null}
         </div>
+        )}
         {contextMenu && (
           <CardContextMenu
             x={contextMenu.x}
